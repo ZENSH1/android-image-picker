@@ -20,6 +20,10 @@ import com.esafirm.imagepicker.helper.IpCrasher
 import com.esafirm.imagepicker.helper.LocaleManager
 import com.esafirm.imagepicker.helper.ViewUtils
 import com.esafirm.imagepicker.model.Image
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 class ImagePickerActivity : AppCompatActivity(), ImagePickerInteractionListener {
 
@@ -62,6 +66,7 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerInteractionListener 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setResult(RESULT_CANCELED)
 
         /* This should not happen */
@@ -80,6 +85,15 @@ class ImagePickerActivity : AppCompatActivity(), ImagePickerInteractionListener 
         setTheme(currentConfig.theme)
         setContentView(R.layout.ef_activity_image_picker)
         setupView(currentConfig)
+
+           ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { view, insets ->
+        val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        view.updatePadding(
+            top = systemBars.top,
+            bottom = systemBars.bottom
+        )
+        insets
+    }
 
         if (savedInstanceState != null) {
             // The fragment has been restored.
